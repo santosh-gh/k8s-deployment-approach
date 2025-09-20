@@ -399,68 +399,68 @@
 
 # Inspect or Debug the Application
 
-  - Get detailed info about a resource
+    - Get detailed info about a resource
 
-    k get deployment -n dev
-    k describe deployment order-service -n dev
+      k get deployment -n dev
+      k describe deployment order-service -n dev
 
-    k get po -n dev
-    k describe po order-service-56cb476565-75nlh -n dev
+      k get po -n dev
+      k describe po order-service-56cb476565-75nlh -n dev
 
-  - View logs from a pod
+    - View logs from a pod
 
-    k logs order-service-56cb476565-75nlh -n dev
+      k logs order-service-56cb476565-75nlh -n dev
 
-  - Access a running container interactively  
+    - Access a running container interactively  
 
-    k exec -it order-service-56cb476565-75nlh -n dev -- /bin/bash 
-    k exec -it product-service-6f56b5745b-ntp56 -n dev -- /bin/bash 
+      k exec -it order-service-56cb476565-75nlh -n dev -- /bin/bash 
+      k exec -it product-service-6f56b5745b-ntp56 -n dev -- /bin/bash 
 
 # Update the Application
 
-  - Scale replicas up/down
+    - Scale replicas up/down
 
-    k scale deployment order-service --replicas=3 -n dev
+      k scale deployment order-service --replicas=3 -n dev
 
-  - Rolling update (change image version)
+    - Rolling update (change image version)
 
-    k set image deployment/order-service order-service=order:1.0.1 -n dev
+      k set image deployment/order-service order-service=order:1.0.1 -n dev
 
 # Rollback 
 
-  - Rollback to the Previous Version
+    - Rollback to the Previous Version
 
-    k rollout undo deployment order-service -n dev
+      k rollout undo deployment order-service -n dev
 
-  - Rollback to a Specific Revision
+    - Rollback to a Specific Revision
 
-    k rollout undo deployment order-service --to-revision=1 -n dev
+      k rollout undo deployment order-service --to-revision=1 -n dev
 
-  - Check Rollout Status  
+    - Check Rollout Status  
 
-    k rollout status deployment order-service -n dev
+      k rollout status deployment order-service -n dev
 
-  - Verify Rollback
+    - Verify Rollback
 
-    Check pods
+      Check pods
 
-    k get pods -o wide
+      k get pods -o wide
 
-    Describe deployment:
+      Describe deployment:
 
-    k describe deployment order-service -n dev
+      k describe deployment order-service -n dev
 
-  - Show all revisions
+    - Show all revisions
 
-    k rollout history deployment order-service -n dev
+      k rollout history deployment order-service -n dev
 
-  - Show details of a specific revision
-   
-    k rollout history deployment order-service -n dev --revision=2
+    - Show details of a specific revision
+    
+      k rollout history deployment order-service -n dev --revision=2
 
-  - Watch rollout progress 
+    - Watch rollout progress 
 
-    k rollout status deployment order-service -n dev
+      k rollout status deployment order-service -n dev
 
 
 # Delete / Clean Up
@@ -541,40 +541,155 @@
     helm status  order 1 -n dev
     helm status  product 1 -n dev
     helm status  store-front 1 -n dev
-
-  Rolls back to the last stable version.
+    
 
 # Deploy to Different Environments
 
-  We can use the same Helm chart to deploy a microservice to multiple environments such as dev, test and
-  prod simply by providing different values by creating different <env>-values.yaml files
+      We can use the same Helm chart to deploy a microservice to multiple environments such as dev, test and
+      prod simply by providing different values by creating different <env>-values.yaml files
 
-  One chart → multiple environments
+      One chart → multiple environments
 
-  No duplication of Kubernetes manifests
+      No duplication of Kubernetes manifests
 
-  Easy overrides per environment (-f <env>-values.yaml)
+      Easy overrides per environment (-f <env>-values.yaml)
 
-  Consistent deployments across dev/test/prod
+      Consistent deployments across dev/test/prod
 
-  helm install config ./multi-helmchart/config -f dev-values.yaml -n dev
-  helm install rabbitmq ./multi-helmchart/rabbitmq -f dev-values.yaml -n dev
-  helm install order ./multi-helmchart/order -f dev-values.yaml -n dev
-  helm install product ./multi-helmchart/product -f dev-values.yaml -n dev
-  helm install store-front ./multi-helmchart/store-front -f dev-values.yaml -n dev
+      helm install config ./multi-helmchart/config -f dev-values.yaml -n dev
+      helm install rabbitmq ./multi-helmchart/rabbitmq -f dev-values.yaml -n dev
+      helm install order ./multi-helmchart/order -f dev-values.yaml -n dev
+      helm install product ./multi-helmchart/product -f dev-values.yaml -n dev
+      helm install store-front ./multi-helmchart/store-front -f dev-values.yaml -n dev
 
-  helm install config ./multi-helmchart/config -f test-values.yaml -n dev
-  helm install rabbitmq ./multi-helmchart/rabbitmq -f test-values.yaml -n dev
-  helm install order ./multi-helmchart/order -f test-values.yaml -n dev
-  helm install product ./multi-helmchart/product -f test-values.yaml -n dev
-  helm install store-front ./multi-helmchart/store-front -f test-values.yaml -n dev
+      helm install config ./multi-helmchart/config -f test-values.yaml -n dev
+      helm install rabbitmq ./multi-helmchart/rabbitmq -f test-values.yaml -n dev
+      helm install order ./multi-helmchart/order -f test-values.yaml -n dev
+      helm install product ./multi-helmchart/product -f test-values.yaml -n dev
+      helm install store-front ./multi-helmchart/store-front -f test-values.yaml -n dev
 
-  helm install config ./multi-helmchart/config -f prod-values.yaml -n dev
-  helm install rabbitmq ./multi-helmchart/rabbitmq -f prod-values.yaml -n dev
-  helm install order ./multi-helmchart/order -f prod-values.yaml -n dev
-  helm install product ./multi-helmchart/product -f prod-values.yaml -n dev
-  helm install store-front ./multi-helmchart/store-front -f prod-values.yaml -n dev
+      helm install config ./multi-helmchart/config -f prod-values.yaml -n dev
+      helm install rabbitmq ./multi-helmchart/rabbitmq -f prod-values.yaml -n dev
+      helm install order ./multi-helmchart/order -f prod-values.yaml -n dev
+      helm install product ./multi-helmchart/product -f prod-values.yaml -n dev
+      helm install store-front ./multi-helmchart/store-front -f prod-values.yaml -n dev
 
+      Same for helm upgrade ...
+
+
+
+# Helm Package 
+
+    helm package → creates .tgz Helm chart archive
+
+    helm push → uploads to GHCR (as OCI registry)
+
+    helm pull & helm install → consumers can download and install directly
+
+    helm package ./multi-helmchart/config 
+    helm package ./multi-helmchart/rabbitmq 
+    helm package ./multi-helmchart/order 
+    helm package ./multi-helmchart/product 
+    helm package ./multi-helmchart/store-front
+
+# Helm Push to OCI Registry (GHCR) - Option 1
+
+    - Charts stored like Docker images (helm push/pull).
+
+    - Create a GitHub token
+
+      export GITHUB_USER='santosh-gh'
+      export GITHUB_TOKEN='token'
+
+    - Login to Git Hub
+
+      echo $GITHUB_TOKEN | helm registry login ghcr.io -u $GITHUB_USER --password-stdin
+
+      
+    - helm push <helm package> oci://ghcr.io/<github-username>/<repo-name>/<chart-name (optional)>
+
+      helm push config-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts 
+      helm push order-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts 
+      helm push product-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts 
+      helm push rabbitmq-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts 
+      helm push store-front-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts
+
+# Pull & Install from GitHub Registry
+
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/config --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/rabbitmq --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/order --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/product --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/store-front --version 0.1.0
+
+    helm install config ./config-0.1.0.tgz
+    helm install rabbitmq ./rabbitmq-0.1.0.tgz
+    helm install order ./order-0.1.0.tgz
+    helm install product ./product-0.1.0.tgz
+    helm install store-front ./store-front-0.1.0.tgz
+
+
+# Hosting Helm Charts on GitHub Pages - Option 2
+
+    - Static Helm repo with index.yaml and .tgz files, browsable via HTTPS.
+
+    - Create a repo on GitHub (say online-helm-chart).
+
+      Clone it locally.
+
+      Copy the packaged chart into the repo.
+
+    - Generate the Helm index
+
+      helm repo index . --url https://santosh-gh.github.io/online-store-helmcharts
+
+      This creates/updates index.yaml with metadata about your charts.
+
+    - Push to GitHub
+
+    - Enable GitHub Pages
+
+      Go to Settings → Pages in your repo.
+
+      Select branch (main) and folder (/root or /docs if you store charts there).
+
+      Save — GitHub Pages will give you a UR
+
+      https://santosh-gh.github.io/online-store-helmcharts/
+
+    - Add repo in Helm
+      
+      $ helm repo add online-store-helmcharts  https://santosh-gh.github.io/online-store-helmcharts                                                                             
+      "online-store-helmcharts" has been added to your repositories
+
+    $ helm repo update
+      Hang tight while we grab the latest from your chart repositories...
+      ...Successfully got an update from the "online-store-helmcharts" chart repository
+      ...Successfully got an update from the "ingress-nginx" chart repository
+      ...Successfully got an update from the "bitnami" chart repository
+      ...Successfully got an update from the "grafana" chart repository
+      ...Successfully got an update from the "prometheus-community" chart repository
+      ...Unable to get an update from the "stable" chart repository (https://charts.helm.sh/stable):
+              read tcp [2a00:23c7:9647:1801:410c:d382:32ad:fac3]:59849->[2606:50c0:8002::153]:443: wsarecv: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+      Update Complete. ⎈Happy Helming!⎈
+
+    $ helm search repo online-store-helmcharts
+      WARNING: Repo "stable" is corrupt or missing. Try 'helm repo update'.
+      WARNING: open C:\Users\HOME\AppData\Local\Temp\helm\repository\stable-index.yaml: The system cannot find the file specified.
+      NAME                                    CHART VERSION   APP VERSION     DESCRIPTION
+      online-store-helmcharts/config          0.1.0           0.1.0           A Helm chart for Kubernetes
+      online-store-helmcharts/order           0.1.0           0.1.0           A Helm chart for Kubernetes
+      online-store-helmcharts/product         0.1.0           0.1.0           A Helm chart for Kubernetes
+      online-store-helmcharts/rabbitmq        0.1.0           0.1.0           A Helm chart for Kubernetes
+      online-store-helmcharts/store-front     0.1.0           0.1.0           A Helm chart for Kubernetes
+
+# Install from GitHub Pages
+
+    helm install config online-store-helmcharts/config --version 0.1.0
+    helm install rabbitmq online-store-helmcharts/rabbitmq --version 0.1.0
+    helm install order online-store-helmcharts/order --version 0.1.0
+    helm install product online-store-helmcharts/product --version 0.1.0
+    helm install store-front online-store-helmcharts/store-front --version 0.1.0
 
 
 # Helm Rollback - Quickly revert if something goes wrong.
@@ -584,6 +699,9 @@
     helm rollback   order -n dev
     helm rollback   product -n dev
     helm rollback   store-front -n dev
+
+    
+   Rolls back to the last stable version.
 
 # Helm Uninstall - Removal of resources.
 
@@ -674,38 +792,38 @@
 
 # Advantages of Helm over kubectl
 
-  - Packaging & Reuse
+    - Packaging & Reuse
 
-    kubectl: You must maintain multiple YAML files manually.
+      kubectl: You must maintain multiple YAML files manually.
 
-    helm: Bundles everything into a chart (like npm package). Easy to share and reuse.
+      helm: Bundles everything into a chart (like npm package). Easy to share and reuse.
 
-  - Templating
+    - Templating
 
-    kubectl: YAML is static. If you want to change replicas from 2 → 5, you edit YAML directly.
+      kubectl: YAML is static. If you want to change replicas from 2 → 5, you edit YAML directly.
 
-    helm: YAML files are templates. Configs are passed via values.yaml → easier to manage across environments.
+      helm: YAML files are templates. Configs are passed via values.yaml → easier to manage across environments.
 
-  - Versioning & Rollback
+    - Versioning & Rollback
 
-    kubectl: No concept of app versions. To rollback, you must manually reapply old YAML.
+      kubectl: No concept of app versions. To rollback, you must manually reapply old YAML.
 
-    helm: Maintains release history. You can rollback easily.
+      helm: Maintains release history. You can rollback easily.
 
-  - Configuration Management
+    - Configuration Management
 
-    kubectl: Hard to manage multiple environments (dev, staging, prod) — you often duplicate YAMLs.
+      kubectl: Hard to manage multiple environments (dev, staging, prod) — you often duplicate YAMLs.
 
-    helm: One chart → multiple environments via different values.yaml.
+      helm: One chart → multiple environments via different values.yaml.
 
-  - App Lifecycle Management
+    - App Lifecycle Management
 
-    kubectl: Limited to create/update/delete resources.
+      kubectl: Limited to create/update/delete resources.
 
-    helm: Full lifecycle (install, upgrade, rollback, uninstall) in a structured, predictable way.
+      helm: Full lifecycle (install, upgrade, rollback, uninstall) in a structured, predictable way.
 
-  - Community & Prebuilt Charts
+    - Community & Prebuilt Charts
 
-    kubectl: We must write every YAML ourself.
+      kubectl: We must write every YAML ourself.
 
-    helm: Thousands of ready-to-use charts (e.g., MySQL, Redis, Prometheus). Saves tons of time.
+      helm: Thousands of ready-to-use charts (e.g., MySQL, Redis, Prometheus). Saves tons of time.
