@@ -544,6 +544,39 @@
 
   Rolls back to the last stable version.
 
+# Deploy to Different Environments
+
+  We can use the same Helm chart to deploy a microservice to multiple environments such as dev, test and
+  prod simply by providing different values by creating different <env>-values.yaml files
+
+  One chart → multiple environments
+
+  No duplication of Kubernetes manifests
+
+  Easy overrides per environment (-f <env>-values.yaml)
+
+  Consistent deployments across dev/test/prod
+
+  helm install config ./multi-helmchart/config -f dev-values.yaml -n dev
+  helm install rabbitmq ./multi-helmchart/rabbitmq -f dev-values.yaml -n dev
+  helm install order ./multi-helmchart/order -f dev-values.yaml -n dev
+  helm install product ./multi-helmchart/product -f dev-values.yaml -n dev
+  helm install store-front ./multi-helmchart/store-front -f dev-values.yaml -n dev
+
+  helm install config ./multi-helmchart/config -f test-values.yaml -n dev
+  helm install rabbitmq ./multi-helmchart/rabbitmq -f test-values.yaml -n dev
+  helm install order ./multi-helmchart/order -f test-values.yaml -n dev
+  helm install product ./multi-helmchart/product -f test-values.yaml -n dev
+  helm install store-front ./multi-helmchart/store-front -f test-values.yaml -n dev
+
+  helm install config ./multi-helmchart/config -f prod-values.yaml -n dev
+  helm install rabbitmq ./multi-helmchart/rabbitmq -f prod-values.yaml -n dev
+  helm install order ./multi-helmchart/order -f prod-values.yaml -n dev
+  helm install product ./multi-helmchart/product -f prod-values.yaml -n dev
+  helm install store-front ./multi-helmchart/store-front -f prod-values.yaml -n dev
+
+
+
 # Helm Rollback - Quickly revert if something goes wrong.
 
     helm rollback   config -n dev
