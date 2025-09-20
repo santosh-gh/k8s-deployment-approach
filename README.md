@@ -491,30 +491,30 @@
 
 # Helm?
 
-  Helm is a package manager for Kubernetes.
+    Helm is a package manager for Kubernetes.
 
-  A Helm chart is a collection of YAML templates that describe Kubernetes resources (Deployments, Services, ConfigMaps, etc.).
+    A Helm chart is a collection of YAML templates that describe Kubernetes resources (Deployments, Services, ConfigMaps, etc.).
 
-  With Helm, we can easily install, upgrade, and manage microservices.
+    With Helm, we can easily install, upgrade, and manage microservices.
 
 # helmify (Convert the plain/raw manifests to Helm Charts)
 
-  helmify -f ./manifests/config helmchart/config
-  helmify -f ./manifests/rabbitmq helmchart/rabbitmq
-  helmify -f ./manifests/order helmchart/order
-  helmify -f ./manifests/product helmchart/product
-  helmify -f ./manifests/store-front helmchart/store-front
+    helmify -f ./manifests/config helmchart/config
+    helmify -f ./manifests/rabbitmq helmchart/rabbitmq
+    helmify -f ./manifests/order helmchart/order
+    helmify -f ./manifests/product helmchart/product
+    helmify -f ./manifests/store-front helmchart/store-front
 
 # Helm Charts Structure
 
-  multi-helmchart/order  
-  templates/                # Kubernetes YAML templates
-    _helpers.tpl            # define template definitions once and reuse across the chart..
-    order-deployment.yaml   # Deployment definition
-    order-service.yaml      # Service definition
-  .helmignore               # Works like .gitignore, but for Helm packaging
-  Chart.yaml                # Metadata about the chart (name, version, etc.)
-  values.yaml               # Default configuration values
+    multi-helmchart/order  
+    templates/                # Kubernetes YAML templates
+      _helpers.tpl            # define template definitions once and reuse across the chart..
+      order-deployment.yaml   # Deployment definition
+      order-service.yaml      # Service definition
+    .helmignore               # Works like .gitignore, but for Helm packaging
+    Chart.yaml                # Metadata about the chart (name, version, etc.)
+    values.yaml               # Default configuration values
 
 # Helm Install - Deploys microservice.
 
