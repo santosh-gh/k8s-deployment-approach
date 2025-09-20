@@ -544,36 +544,36 @@
 
 # Deploy to Different Environments
 
-    We can use the same Helm chart to deploy a microservice to multiple environments such as dev, test and
-    prod simply by providing different values by creating different <env>-values.yaml files
+      We can use the same Helm chart to deploy a microservice to multiple environments such as dev, test and
+      prod simply by providing different values by creating different <env>-values.yaml files
 
-    One chart → multiple environments
+      One chart → multiple environments
 
-    No duplication of Kubernetes manifests
+      No duplication of Kubernetes manifests
 
-    Easy overrides per environment (-f <env>-values.yaml)
+      Easy overrides per environment (-f <env>-values.yaml)
 
-    Consistent deployments across dev/test/prod
+      Consistent deployments across dev/test/prod
 
-    helm install config ./multi-helmchart/config -f dev-values.yaml -n dev
-    helm install rabbitmq ./multi-helmchart/rabbitmq -f dev-values.yaml -n dev
-    helm install order ./multi-helmchart/order -f dev-values.yaml -n dev
-    helm install product ./multi-helmchart/product -f dev-values.yaml -n dev
-    helm install store-front ./multi-helmchart/store-front -f dev-values.yaml -n dev
+      helm install config ./multi-helmchart/config -f dev-values.yaml -n dev
+      helm install rabbitmq ./multi-helmchart/rabbitmq -f dev-values.yaml -n dev
+      helm install order ./multi-helmchart/order -f dev-values.yaml -n dev
+      helm install product ./multi-helmchart/product -f dev-values.yaml -n dev
+      helm install store-front ./multi-helmchart/store-front -f dev-values.yaml -n dev
 
-    helm install config ./multi-helmchart/config -f test-values.yaml -n dev
-    helm install rabbitmq ./multi-helmchart/rabbitmq -f test-values.yaml -n dev
-    helm install order ./multi-helmchart/order -f test-values.yaml -n dev
-    helm install product ./multi-helmchart/product -f test-values.yaml -n dev
-    helm install store-front ./multi-helmchart/store-front -f test-values.yaml -n dev
+      helm install config ./multi-helmchart/config -f test-values.yaml -n dev
+      helm install rabbitmq ./multi-helmchart/rabbitmq -f test-values.yaml -n dev
+      helm install order ./multi-helmchart/order -f test-values.yaml -n dev
+      helm install product ./multi-helmchart/product -f test-values.yaml -n dev
+      helm install store-front ./multi-helmchart/store-front -f test-values.yaml -n dev
 
-    helm install config ./multi-helmchart/config -f prod-values.yaml -n dev
-    helm install rabbitmq ./multi-helmchart/rabbitmq -f prod-values.yaml -n dev
-    helm install order ./multi-helmchart/order -f prod-values.yaml -n dev
-    helm install product ./multi-helmchart/product -f prod-values.yaml -n dev
-    helm install store-front ./multi-helmchart/store-front -f prod-values.yaml -n dev
+      helm install config ./multi-helmchart/config -f prod-values.yaml -n dev
+      helm install rabbitmq ./multi-helmchart/rabbitmq -f prod-values.yaml -n dev
+      helm install order ./multi-helmchart/order -f prod-values.yaml -n dev
+      helm install product ./multi-helmchart/product -f prod-values.yaml -n dev
+      helm install store-front ./multi-helmchart/store-front -f prod-values.yaml -n dev
 
-    Same for helm upgrade ...
+      Same for helm upgrade ...
 
 # Helm Package 
 
@@ -613,17 +613,17 @@
 
 # Pull & Install from GitHub Registry
 
-      helm pull oci://ghcr.io/santosh-gh/online-store-charts/config --version 0.1.0
-      helm pull oci://ghcr.io/santosh-gh/online-store-charts/rabbitmq --version 0.1.0
-      helm pull oci://ghcr.io/santosh-gh/online-store-charts/order --version 0.1.0
-      helm pull oci://ghcr.io/santosh-gh/online-store-charts/product --version 0.1.0
-      helm pull oci://ghcr.io/santosh-gh/online-store-charts/store-front --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/config --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/rabbitmq --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/order --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/product --version 0.1.0
+    helm pull oci://ghcr.io/santosh-gh/online-store-charts/store-front --version 0.1.0
 
-      helm install config ./config-0.1.0.tgz
-      helm install rabbitmq ./rabbitmq-0.1.0.tgz
-      helm install order ./order-0.1.0.tgz
-      helm install product ./product-0.1.0.tgz
-      helm install store-front ./store-front-0.1.0.tgz
+    helm install config ./config-0.1.0.tgz
+    helm install rabbitmq ./rabbitmq-0.1.0.tgz
+    helm install order ./order-0.1.0.tgz
+    helm install product ./product-0.1.0.tgz
+    helm install store-front ./store-front-0.1.0.tgz
 
 
 # Hosting Helm Charts on GitHub Pages - Option 2
