@@ -542,8 +542,6 @@
     helm status  product 1 -n dev
     helm status  store-front 1 -n dev
 
-  Rolls back to the last stable version.
-
 # Deploy to Different Environments
 
   We can use the same Helm chart to deploy a microservice to multiple environments such as dev, test and
@@ -575,6 +573,120 @@
   helm install product ./multi-helmchart/product -f prod-values.yaml -n dev
   helm install store-front ./multi-helmchart/store-front -f prod-values.yaml -n dev
 
+  Same for helm upgrade ...
+
+# Helm Package 
+
+    helm package → creates .tgz Helm chart archive
+
+    helm push → uploads to GHCR (as OCI registry)
+
+    helm pull & helm install → consumers can download and install directly
+
+    helm package ./multi-helmchart/config 
+    helm package ./multi-helmchart/rabbitmq 
+    helm package ./multi-helmchart/order 
+    helm package ./multi-helmchart/product 
+    helm package ./multi-helmchart/store-front
+
+# Helm Push to OCI Registry (GHCR) - Option 1
+
+    - Charts stored like Docker images (helm push/pull).
+
+    - Create a GitHub token
+
+      export GITHUB_USER='santosh-gh'
+      export GITHUB_TOKEN='token'
+
+    - Login to Git Hub
+
+      echo $GITHUB_TOKEN | helm registry login ghcr.io -u $GITHUB_USER --password-stdin
+
+      
+    - helm push <helm package> oci://ghcr.io/<github-username>/<repo-name>/<chart-name (optional)>
+
+      helm push config-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts 
+      helm push order-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts 
+      helm push product-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts 
+      helm push rabbitmq-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts 
+      helm push store-front-0.1.0.tgz oci://ghcr.io/santosh-gh/online-store-charts
+
+# Pull & Install from GitHub Registry
+
+      helm pull oci://ghcr.io/santosh-gh/online-store-charts/config --version 0.1.0
+      helm pull oci://ghcr.io/santosh-gh/online-store-charts/rabbitmq --version 0.1.0
+      helm pull oci://ghcr.io/santosh-gh/online-store-charts/order --version 0.1.0
+      helm pull oci://ghcr.io/santosh-gh/online-store-charts/product --version 0.1.0
+      helm pull oci://ghcr.io/santosh-gh/online-store-charts/store-front --version 0.1.0
+
+      helm install config ./config-0.1.0.tgz
+      helm install rabbitmq ./rabbitmq-0.1.0.tgz
+      helm install order ./order-0.1.0.tgz
+      helm install product ./product-0.1.0.tgz
+      helm install store-front ./store-front-0.1.0.tgz
+
+
+# Hosting Helm Charts on GitHub Pages - Option 2
+
+  - Static Helm repo with index.yaml and .tgz files, browsable via HTTPS.
+
+  - Create a repo on GitHub (say online-helm-chart).
+
+    Clone it locally.
+
+    Copy the packaged chart into the repo.
+
+  - Generate the Helm index
+
+    helm repo index . --url https://santosh-gh.github.io/online-store-helmcharts
+
+    This creates/updates index.yaml with metadata about your charts.
+
+  - Push to GitHub
+
+  - Enable GitHub Pages
+
+    Go to Settings → Pages in your repo.
+
+    Select branch (main) and folder (/root or /docs if you store charts there).
+
+    Save — GitHub Pages will give you a UR
+
+    https://santosh-gh.github.io/online-store-helmcharts/
+
+  - Add repo in Helm
+    
+    $ helm repo add online-store-helmcharts  https://santosh-gh.github.io/online-store-helmcharts                                                                             
+    "online-store-helmcharts" has been added to your repositories
+
+    $ helm repo update
+      Hang tight while we grab the latest from your chart repositories...
+      ...Successfully got an update from the "online-store-helmcharts" chart repository
+      ...Successfully got an update from the "ingress-nginx" chart repository
+      ...Successfully got an update from the "bitnami" chart repository
+      ...Successfully got an update from the "grafana" chart repository
+      ...Successfully got an update from the "prometheus-community" chart repository
+      ...Unable to get an update from the "stable" chart repository (https://charts.helm.sh/stable):
+              read tcp [2a00:23c7:9647:1801:410c:d382:32ad:fac3]:59849->[2606:50c0:8002::153]:443: wsarecv: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+      Update Complete. ⎈Happy Helming!⎈
+
+    $ helm search repo online-store-helmcharts
+      WARNING: Repo "stable" is corrupt or missing. Try 'helm repo update'.
+      WARNING: open C:\Users\HOME\AppData\Local\Temp\helm\repository\stable-index.yaml: The system cannot find the file specified.
+      NAME                                    CHART VERSION   APP VERSION     DESCRIPTION
+      online-store-helmcharts/config          0.1.0           0.1.0           A Helm chart for Kubernetes
+      online-store-helmcharts/order           0.1.0           0.1.0           A Helm chart for Kubernetes
+      online-store-helmcharts/product         0.1.0           0.1.0           A Helm chart for Kubernetes
+      online-store-helmcharts/rabbitmq        0.1.0           0.1.0           A Helm chart for Kubernetes
+      online-store-helmcharts/store-front     0.1.0           0.1.0           A Helm chart for Kubernetes
+
+# Install from GitHub Pages
+
+    helm install config online-store-helmcharts/config --version 0.1.0
+    helm install rabbitmq online-store-helmcharts/rabbitmq --version 0.1.0
+    helm install order online-store-helmcharts/order --version 0.1.0
+    helm install product online-store-helmcharts/product --version 0.1.0
+    helm install store-front online-store-helmcharts/store-front --version 0.1.0
 
 
 # Helm Rollback - Quickly revert if something goes wrong.
@@ -584,6 +696,9 @@
     helm rollback   order -n dev
     helm rollback   product -n dev
     helm rollback   store-front -n dev
+
+    
+   Rolls back to the last stable version.
 
 # Helm Uninstall - Removal of resources.
 
