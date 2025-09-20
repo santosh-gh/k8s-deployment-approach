@@ -947,3 +947,53 @@
     kubectl apply -k ./kustomize-helmcharts/order/overlays/prod -n prod
     kubectl apply -k ./kustomize-helmcharts/product/overlays/prod -n prod
     kubectl apply -k ./kustomize-helmcharts/store-front/overlays/prod -n prod
+
+# Helmize Kustomization (Overlay first)
+
+# Update base and overlays template manifests to generate the helm template (deploy.yaml)
+
+    kustomize build ./helmize-kustmization/config/base > ./helmize-kustmization/config/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/rabbitmq/overlays/dev > ./helmize-kustmization/rabbitmq/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/order/overlays/dev > ./helmize-kustmization/order/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/product/overlays/dev > ./helmize-kustmization/product/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/store-front/overlays/dev > ./helmize-kustmization/store-front/templates/deploy.yaml
+
+    kustomize build ./helmize-kustmization/rabbitmq/overlays/test > ./helmize-kustmization/rabbitmq/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/order/overlays/test > ./helmize-kustmization/order/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/product/overlays/test > ./helmize-kustmization/product/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/store-front/overlays/test > ./helmize-kustmization/store-front/templates/deploy.yaml
+
+    kustomize build ./helmize-kustmization/rabbitmq/overlays/prod > ./helmize-kustmization/rabbitmq/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/order/overlays/prod > ./helmize-kustmization/order/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/product/overlays/prod > ./helmize-kustmization/product/templates/deploy.yaml
+    kustomize build ./helmize-kustmization/store-front/overlays/prod > ./helmize-kustmization/store-front/templates/deploy.yaml
+
+
+# Review deploy manifest (apply patches)    
+
+    helm template ./helmize-kustmization/config
+    helm template ./helmize-kustmization/rabbitmq
+    helm template ./helmize-kustmization/order
+    
+    helm template ./helmize-kustmization/product
+    helm template ./helmize-kustmization/store-front
+
+# Apply the helm chart
+
+    helm install config ./helmize-kustmization/config -n dev
+    helm install rabbitmq ./helmize-kustmization/rabbitmq -n dev
+    helm install order ./helmize-kustmization/order -n dev
+    helm install product ./helmize-kustmization/product -n dev
+    helm install store-front ./helmize-kustmization/store-front -n dev
+
+    helm install config ./helmize-kustmization/config -n test
+    helm install rabbitmq ./helmize-kustmization/rabbitmq -n test
+    helm install order ./helmize-kustmization/order -n test
+    helm install product ./helmize-kustmization/product -n test
+    helm install store-front ./helmize-kustmization/store-front -n test
+
+    helm install config ./helmize-kustmization/config -n prod
+    helm install rabbitmq ./helmize-kustmization/rabbitmq -n prod
+    helm install order ./helmize-kustmization/order -n prod
+    helm install product ./helmize-kustmization/product -n prod
+    helm install store-front ./helmize-kustmization/store-front -n prod
