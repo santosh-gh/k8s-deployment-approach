@@ -489,7 +489,15 @@
     k delete -f ./manifests/product -n dev   
     k delete -f ./manifests/store-front -n dev
 
-# helmify 
+# Helm?
+
+  Helm is a package manager for Kubernetes.
+
+  A Helm chart is a collection of YAML templates that describe Kubernetes resources (Deployments, Services, ConfigMaps, etc.).
+
+  With Helm, we can easily install, upgrade, and manage microservices.
+
+# helmify (Convert the plain/raw manifests to Helm Charts)
 
   helmify -f ./manifests/config helmchart/config
   helmify -f ./manifests/rabbitmq helmchart/rabbitmq
@@ -497,7 +505,18 @@
   helmify -f ./manifests/product helmchart/product
   helmify -f ./manifests/store-front helmchart/store-front
 
-# Helm Deploy
+# Helm Charts Structure
+
+  multi-helmchart/order  
+  templates/                # Kubernetes YAML templates
+    _helpers.tpl            # define template definitions once and reuse across the chart..
+    order-deployment.yaml   # Deployment definition
+    order-service.yaml      # Service definition
+  .helmignore               # Works like .gitignore, but for Helm packaging
+  Chart.yaml                # Metadata about the chart (name, version, etc.)
+  values.yaml               # Default configuration values
+
+# Helm Install - Deploys microservice.
 
   helm install config ./multi-helmchart/config -n dev
   helm install rabbitmq ./multi-helmchart/rabbitmq -n dev
@@ -505,16 +524,72 @@
   helm install product ./multi-helmchart/product -n dev
   helm install store-front ./multi-helmchart/store-front -n dev
 
+# Helm Upgrade - Rolling updates to new versions.
+
   helm upgrade config ./multi-helmchart/config -n dev
   helm upgrade rabbitmq ./multi-helmchart/rabbitmq -n dev
   helm upgrade order ./multi-helmchart/order -n dev
   helm upgrade product ./multi-helmchart/product -n dev
   helm upgrade store-front ./multi-helmchart/store-front -n dev
 
-# Helm Uninstall
+# Check status
+
+  helm status  config 1 -n dev
+  helm status  rabbitmq 1 -n dev
+  helm status  order 1 -n dev
+  helm status  product 1 -n dev
+  helm status  store-front 1 -n dev
+
+  Rolls back to the last stable version.
+
+# Helm Rollback - Quickly revert if something goes wrong.
+
+  helm rollback   config -n dev
+  helm rollback   rabbitmq -n dev
+  helm rollback   order -n dev
+  helm rollback   product -n dev
+  helm rollback   store-front -n dev
+
+# Helm Uninstall - Removal of resources.
 
   helm uninstall config -n dev
   helm uninstall rabbitmq -n dev
   helm uninstall order -n dev
   helm uninstall product -n dev
   helm uninstall store-front -n dev
+
+# Helm Lifecycle
+
+                        ┌───────────────────────┐
+                        │   Start with Chart    │
+                        │ (YAML templates +     │
+                        │   values.yaml)        │
+                        └───────────┬───────────┘
+                                    │
+                                    ▼
+                            ┌────────────────┐
+                            │   INSTALL      │
+                            │ helm install   │
+                            └───────┬────────┘
+                                    │
+                                    ▼
+                          ┌────────────────────┐
+                          │ Kubernetes objects │
+                          │ created: Deployment│
+                          │ Service, Ingress…  │
+                          └─────────┬──────────┘
+                                    │
+                ┌──────────────────┼──────────────────┐
+                │                  │                  │
+                ▼                  ▼                  ▼
+            ┌─────────────┐   ┌─────────────┐   ┌─────────────────┐
+            │   UPGRADE   │   │  ROLLBACK   │   │   DELETE        │
+            │ helm upgrade│   │helm rollback│   │ helm uninstall│ |
+            └──────┬──────┘   └──────┬──────┘   └───────┬─────────┘
+                  │                 │                  │
+                  ▼                 ▼                  ▼
+            ┌─────────────┐   ┌───────────────┐   ┌───────────────────┐
+            │ New release │   │ Previous      │   │ All resources     │
+            │ deployed    │   │ version       │   │ removed from      │
+            │ (e.g. v2)   │   │ restored      │   │ cluster           │
+            └─────────────┘   └───────────────┘   └───────────────────┘
