@@ -713,28 +713,28 @@
 
 # Helm Lifecycle
 
-                                        ┌───────────────────────┐
-                                        │   Start with Chart    │
-                                        │ (YAML templates +     │
-                                        │   values.yaml)        │
-                                        └───────────┬───────────┘
-                                                    │
-                                                    ▼
-                                            ┌────────────────┐
-                                            │   INSTALL      │
-                                            │ helm install   │
-                                            └───────┬────────┘
-                                                    │
-                                                    ▼
-                                          ┌────────────────────┐
-                                          │ Kubernetes objects │
-                                          │ created: Deployment│
-                                          │ Service, Ingress…  │
-                                          └─────────┬──────────┘
-                                                    │
-                                ┌──────────────────┼──────────────────┐
-                                │                  │                  │
-                                ▼                  ▼                  ▼
+                                      ┌───────────────────────┐
+                                      │   Start with Chart    │
+                                      │ (YAML templates +     │
+                                      │   values.yaml)        │
+                                      └───────────┬───────────┘
+                                                  │
+                                                  ▼
+                                          ┌────────────────┐
+                                          │   INSTALL      │
+                                          │ helm install   │
+                                          └───────┬────────┘
+                                                  │
+                                                  ▼
+                                        ┌────────────────────┐
+                                        │ Kubernetes objects │
+                                        │ created: Deployment│
+                                        │ Service, Ingress…  │
+                                        └─────────┬──────────┘
+                                                  │
+                                ┌─────────────────┼──────────────────┐
+                                │                 │                  │
+                                ▼                 ▼                  ▼
                           ┌─────────────┐   ┌─────────────┐   ┌─────────────────┐
                           │   UPGRADE   │   │  ROLLBACK   │   │   DELETE        │
                           │ helm upgrade│   │helm rollback│   │ helm uninstall│ |
