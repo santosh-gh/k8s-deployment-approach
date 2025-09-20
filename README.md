@@ -509,7 +509,7 @@
 
 # Helm Charts Structure
 
-    multi-helmchart/order  
+    helmcharts/order  
     templates/                # Kubernetes YAML templates
       _helpers.tpl            # define template definitions once and reuse across the chart..
       order-deployment.yaml   # Deployment definition
@@ -520,19 +520,19 @@
 
 # Helm Install - Deploys microservice.
 
-    helm install config ./multi-helmchart/config -n dev
-    helm install rabbitmq ./multi-helmchart/rabbitmq -n dev
-    helm install order ./multi-helmchart/order -n dev
-    helm install product ./multi-helmchart/product -n dev
-    helm install store-front ./multi-helmchart/store-front -n dev
+    helm install config ./helmcharts/config -n dev
+    helm install rabbitmq ./helmcharts/rabbitmq -n dev
+    helm install order ./helmcharts/order -n dev
+    helm install product ./helmcharts/product -n dev
+    helm install store-front ./helmcharts/store-front -n dev
 
 # Helm Upgrade - Rolling updates to new versions.
 
-    helm upgrade config ./multi-helmchart/config -n dev
-    helm upgrade rabbitmq ./multi-helmchart/rabbitmq -n dev
-    helm upgrade order ./multi-helmchart/order -n dev
-    helm upgrade product ./multi-helmchart/product -n dev
-    helm upgrade store-front ./multi-helmchart/store-front -n dev
+    helm upgrade config ./helmcharts/config -n dev
+    helm upgrade rabbitmq ./helmcharts/rabbitmq -n dev
+    helm upgrade order ./helmcharts/order -n dev
+    helm upgrade product ./helmcharts/product -n dev
+    helm upgrade store-front ./helmcharts/store-front -n dev
 
 # Check status
 
@@ -556,23 +556,23 @@
 
     Consistent deployments across dev/test/prod
 
-    helm install config ./multi-helmchart/config -f dev-values.yaml -n dev
-    helm install rabbitmq ./multi-helmchart/rabbitmq -f dev-values.yaml -n dev
-    helm install order ./multi-helmchart/order -f dev-values.yaml -n dev
-    helm install product ./multi-helmchart/product -f dev-values.yaml -n dev
-    helm install store-front ./multi-helmchart/store-front -f dev-values.yaml -n dev
+    helm install config ./helmcharts/config -f dev-values.yaml -n dev
+    helm install rabbitmq ./helmcharts/rabbitmq -f dev-values.yaml -n dev
+    helm install order ./helmcharts/order -f dev-values.yaml -n dev
+    helm install product ./helmcharts/product -f dev-values.yaml -n dev
+    helm install store-front ./helmcharts/store-front -f dev-values.yaml -n dev
 
-    helm install config ./multi-helmchart/config -f test-values.yaml -n dev
-    helm install rabbitmq ./multi-helmchart/rabbitmq -f test-values.yaml -n dev
-    helm install order ./multi-helmchart/order -f test-values.yaml -n dev
-    helm install product ./multi-helmchart/product -f test-values.yaml -n dev
-    helm install store-front ./multi-helmchart/store-front -f test-values.yaml -n dev
+    helm install config ./helmcharts/config -f test-values.yaml -n dev
+    helm install rabbitmq ./helmcharts/rabbitmq -f test-values.yaml -n dev
+    helm install order ./helmcharts/order -f test-values.yaml -n dev
+    helm install product ./helmcharts/product -f test-values.yaml -n dev
+    helm install store-front ./helmcharts/store-front -f test-values.yaml -n dev
 
-    helm install config ./multi-helmchart/config -f prod-values.yaml -n dev
-    helm install rabbitmq ./multi-helmchart/rabbitmq -f prod-values.yaml -n dev
-    helm install order ./multi-helmchart/order -f prod-values.yaml -n dev
-    helm install product ./multi-helmchart/product -f prod-values.yaml -n dev
-    helm install store-front ./multi-helmchart/store-front -f prod-values.yaml -n dev
+    helm install config ./helmcharts/config -f prod-values.yaml -n dev
+    helm install rabbitmq ./helmcharts/rabbitmq -f prod-values.yaml -n dev
+    helm install order ./helmcharts/order -f prod-values.yaml -n dev
+    helm install product ./helmcharts/product -f prod-values.yaml -n dev
+    helm install store-front ./helmcharts/store-front -f prod-values.yaml -n dev
 
     Same for helm upgrade ...
 
@@ -586,11 +586,11 @@
 
     helm pull & helm install → consumers can download and install directly
 
-    helm package ./multi-helmchart/config 
-    helm package ./multi-helmchart/rabbitmq 
-    helm package ./multi-helmchart/order 
-    helm package ./multi-helmchart/product 
-    helm package ./multi-helmchart/store-front
+    helm package ./helmcharts/config 
+    helm package ./helmcharts/rabbitmq 
+    helm package ./helmcharts/order 
+    helm package ./helmcharts/product 
+    helm package ./helmcharts/store-front
 
 # Helm Push to OCI Registry (GHCR) - Option 1
 
@@ -827,3 +827,49 @@
       kubectl: We must write every YAML ourself.
 
       helm: Thousands of ready-to-use charts (e.g., MySQL, Redis, Prometheus). Saves tons of time.
+
+# Kustomize
+
+# Review
+
+      kustomize build ./manifests/order/overlays/dev
+
+      kubectl kustomize ./manifests/config/base/
+      kubectl kustomize ./manifests/rabbitmq/overlays/dev
+      kubectl kustomize ./manifests/order/overlays/dev
+      kubectl kustomize ./manifests/product/overlays/dev
+      kubectl kustomize ./manifests/store-front/overlays/dev
+
+      kubectl kustomize ./manifests/config/base/
+      kubectl kustomize ./manifests/rabbitmq/overlays/test
+      kubectl kustomize ./manifests/order/overlays/test
+      kubectl kustomize ./manifests/product/overlays/test
+      kubectl kustomize ./manifests/store-front/overlays/test
+
+      kubectl kustomize ./manifests/config/base/
+      kubectl kustomize ./manifests/rabbitmq/overlays/prod
+      kubectl kustomize ./manifests/order/overlays/prod
+      kubectl kustomize ./manifests/product/overlays/prod
+      kubectl kustomize ./manifests/store-front/overlays/prod
+
+# Apply Patches
+
+      kustomize build ./manifests/order/overlays/dev | kubectl apply -f . -n dev
+
+      kubectl apply -k ./manifests/config/base/ -n dev
+      kubectl apply -k ./manifests/rabbitmq/overlays/dev -n dev
+      kubectl apply -k ./manifests/order/overlays/dev -n dev
+      kubectl apply -k ./manifests/product/overlays/dev -n dev
+      kubectl apply -k ./manifests/store-front/overlays/dev -n dev
+
+      kubectl apply -k ./manifests/config/base/ -n test
+      kubectl apply -k ./manifests/rabbitmq/overlays/test -n test
+      kubectl apply -k ./manifests/order/overlays/test -n test
+      kubectl apply -k ./manifests/product/overlays/test -n test
+      kubectl apply -k ./manifests/store-front/overlays/test -n test
+
+      kubectl apply -k ./manifests/config/base/ -n prod
+      kubectl apply -k ./manifests/rabbitmq/overlays/prod -n prod
+      kubectl apply -k ./manifests/order/overlays/prod -n prod
+      kubectl apply -k ./manifests/product/overlays/prod -n prod
+      kubectl apply -k ./manifests/store-front/overlays/prod -n prod
