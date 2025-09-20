@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: store-front-service
+spec:
+  type: NodePort   # For local testing. Use LoadBalancer on cloud.
+  selector:
+    app: store-front-service
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30080 # NodePort (range: 30000–32767)

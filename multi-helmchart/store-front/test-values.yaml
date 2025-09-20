@@ -1,0 +1,21 @@
+kubernetesClusterDomain: cluster.local
+storeFront:
+  nodeSelector:
+    kubernetes.io/os: linux
+  ports:
+  - port: 80
+    targetPort: 8080
+    nodePort: 30080 
+  replicas: 2
+  storeFront:
+    image:
+      repository: e880613/store-front
+      tag: 1.0.0
+    resources:
+      limits:
+        cpu: "1"
+        memory: 512Mi
+      requests:
+        cpu: 1m
+        memory: 200Mi
+  type: NodePort
