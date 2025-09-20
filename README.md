@@ -828,48 +828,122 @@
 
       helm: Thousands of ready-to-use charts (e.g., MySQL, Redis, Prometheus). Saves tons of time.
 
-# Kustomize
+# Kustomize plane/raw manifests
 
 # Review
 
-      kustomize build ./manifests/order/overlays/dev
+    kustomize build ./manifests/order/overlays/dev
 
-      kubectl kustomize ./manifests/config/base/
-      kubectl kustomize ./manifests/rabbitmq/overlays/dev
-      kubectl kustomize ./manifests/order/overlays/dev
-      kubectl kustomize ./manifests/product/overlays/dev
-      kubectl kustomize ./manifests/store-front/overlays/dev
+    kubectl kustomize ./manifests/config/base/
+    kubectl kustomize ./manifests/rabbitmq/overlays/dev
+    kubectl kustomize ./manifests/order/overlays/dev
+    kubectl kustomize ./manifests/product/overlays/dev
+    kubectl kustomize ./manifests/store-front/overlays/dev
 
-      kubectl kustomize ./manifests/config/base/
-      kubectl kustomize ./manifests/rabbitmq/overlays/test
-      kubectl kustomize ./manifests/order/overlays/test
-      kubectl kustomize ./manifests/product/overlays/test
-      kubectl kustomize ./manifests/store-front/overlays/test
+    kubectl kustomize ./manifests/config/base/
+    kubectl kustomize ./manifests/rabbitmq/overlays/test
+    kubectl kustomize ./manifests/order/overlays/test
+    kubectl kustomize ./manifests/product/overlays/test
+    kubectl kustomize ./manifests/store-front/overlays/test
 
-      kubectl kustomize ./manifests/config/base/
-      kubectl kustomize ./manifests/rabbitmq/overlays/prod
-      kubectl kustomize ./manifests/order/overlays/prod
-      kubectl kustomize ./manifests/product/overlays/prod
-      kubectl kustomize ./manifests/store-front/overlays/prod
+    kubectl kustomize ./manifests/config/base/
+    kubectl kustomize ./manifests/rabbitmq/overlays/prod
+    kubectl kustomize ./manifests/order/overlays/prod
+    kubectl kustomize ./manifests/product/overlays/prod
+    kubectl kustomize ./manifests/store-front/overlays/prod
 
 # Apply Patches
 
-      kustomize build ./manifests/order/overlays/dev | kubectl apply -f . -n dev
+    kustomize build ./manifests/order/overlays/dev | kubectl apply -f . -n dev
 
-      kubectl apply -k ./manifests/config/base/ -n dev
-      kubectl apply -k ./manifests/rabbitmq/overlays/dev -n dev
-      kubectl apply -k ./manifests/order/overlays/dev -n dev
-      kubectl apply -k ./manifests/product/overlays/dev -n dev
-      kubectl apply -k ./manifests/store-front/overlays/dev -n dev
+    kubectl apply -k ./manifests/config/base/ -n dev
+    kubectl apply -k ./manifests/rabbitmq/overlays/dev -n dev
+    kubectl apply -k ./manifests/order/overlays/dev -n dev
+    kubectl apply -k ./manifests/product/overlays/dev -n dev
+    kubectl apply -k ./manifests/store-front/overlays/dev -n dev
 
-      kubectl apply -k ./manifests/config/base/ -n test
-      kubectl apply -k ./manifests/rabbitmq/overlays/test -n test
-      kubectl apply -k ./manifests/order/overlays/test -n test
-      kubectl apply -k ./manifests/product/overlays/test -n test
-      kubectl apply -k ./manifests/store-front/overlays/test -n test
+    kubectl apply -k ./manifests/config/base/ -n test
+    kubectl apply -k ./manifests/rabbitmq/overlays/test -n test
+    kubectl apply -k ./manifests/order/overlays/test -n test
+    kubectl apply -k ./manifests/product/overlays/test -n test
+    kubectl apply -k ./manifests/store-front/overlays/test -n test
 
-      kubectl apply -k ./manifests/config/base/ -n prod
-      kubectl apply -k ./manifests/rabbitmq/overlays/prod -n prod
-      kubectl apply -k ./manifests/order/overlays/prod -n prod
-      kubectl apply -k ./manifests/product/overlays/prod -n prod
-      kubectl apply -k ./manifests/store-front/overlays/prod -n prod
+    kubectl apply -k ./manifests/config/base/ -n prod
+    kubectl apply -k ./manifests/rabbitmq/overlays/prod -n prod
+    kubectl apply -k ./manifests/order/overlays/prod -n prod
+    kubectl apply -k ./manifests/product/overlays/prod -n prod
+    kubectl apply -k ./manifests/store-front/overlays/prod -n prod
+
+# Using Helm and Kustomize togeteher
+  
+    There are 2 approches for using Helm and Kustomize togeteher:
+
+    1. Template First
+
+      Pros: Can fully utilize helm features.
+
+      Cons: No release versioning and rollbacks.
+
+    2. Overlay First
+
+      Pros: Helm’s packaging and versioning
+            Release versioning and rollbacks
+
+        Cons: Limited helm benefits
+
+
+# Kustomize Helm Charts (template first)
+
+# Generate output template (deploy.yaml)
+
+    helm template ./kustomize-helmcharts/config > ./kustomize-helmcharts/config/base/deploy.yaml
+    helm template ./kustomize-helmcharts/order > ./kustomize-helmcharts/order/base/deploy.yaml
+    helm template ./kustomize-helmcharts/product > ./kustomize-helmcharts/product/base/deploy.yaml
+    helm template ./kustomize-helmcharts/rabbitmq > ./kustomize-helmcharts/rabbitmq/base/deploy.yaml
+    helm template ./kustomize-helmcharts/store-front > ./kustomize-helmcharts/store-front/base/deploy.yaml
+
+# Review deploy manifest (apply patches)    
+
+    kustomize build ./kustomize-helmcharts/order/overlays/dev
+    kustomize build ./kustomize-helmcharts/order/overlays/test
+    kustomize build ./kustomize-helmcharts/order/overlays/prod        
+
+    kubectl kustomize ./kustomize-helmcharts/config/base/
+    kubectl kustomize ./kustomize-helmcharts/rabbitmq/overlays/dev
+    kubectl kustomize ./kustomize-helmcharts/order/overlays/dev
+    kubectl kustomize ./kustomize-helmcharts/product/overlays/dev
+    kubectl kustomize ./kustomize-helmcharts/store-front/overlays/dev
+
+    kubectl kustomize ./kustomize-helmcharts/config/base/
+    kubectl kustomize ./kustomize-helmcharts/rabbitmq/overlays/test
+    kubectl kustomize ./kustomize-helmcharts/order/overlays/test
+    kubectl kustomize ./kustomize-helmcharts/product/overlays/test
+    kubectl kustomize ./kustomize-helmcharts/store-front/overlays/test
+
+    kubectl kustomize ./kustomize-helmcharts/config/base/
+    kubectl kustomize ./kustomize-helmcharts/rabbitmq/overlays/prod
+    kubectl kustomize ./kustomize-helmcharts/order/overlays/prod
+    kubectl kustomize ./kustomize-helmcharts/product/overlays/prod
+    kubectl kustomize ./kustomize-helmcharts/store-front/overlays/prod
+
+# Apply the manifest
+
+    kustomize build ./kustomize-helmcharts/order/overlays/dev | kubectl apply -f . -n dev
+
+    kubectl apply -k ./kustomize-helmcharts/config/base/ -n dev
+    kubectl apply -k ./kustomize-helmcharts/rabbitmq/overlays/dev -n dev
+    kubectl apply -k ./kustomize-helmcharts/order/overlays/dev -n dev
+    kubectl apply -k ./kustomize-helmcharts/product/overlays/dev -n dev
+    kubectl apply -k ./kustomize-helmcharts/store-front/overlays/dev -n dev
+
+    kubectl apply -k ./kustomize-helmcharts/config/base/ -n test
+    kubectl apply -k ./kustomize-helmcharts/rabbitmq/overlays/test -n test
+    kubectl apply -k ./kustomize-helmcharts/order/overlays/test -n test
+    kubectl apply -k ./kustomize-helmcharts/product/overlays/test -n test
+    kubectl apply -k ./kustomize-helmcharts/store-front/overlays/test -n test
+
+    kubectl apply -k ./kustomize-helmcharts/config/base/ -n prod
+    kubectl apply -k ./kustomize-helmcharts/rabbitmq/overlays/prod -n prod
+    kubectl apply -k ./kustomize-helmcharts/order/overlays/prod -n prod
+    kubectl apply -k ./kustomize-helmcharts/product/overlays/prod -n prod
+    kubectl apply -k ./kustomize-helmcharts/store-front/overlays/prod -n prod
