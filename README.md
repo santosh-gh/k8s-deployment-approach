@@ -560,36 +560,36 @@
 
 # Helm Lifecycle
 
-                        ┌───────────────────────┐
-                        │   Start with Chart    │
-                        │ (YAML templates +     │
-                        │   values.yaml)        │
-                        └───────────┬───────────┘
-                                    │
-                                    ▼
-                            ┌────────────────┐
-                            │   INSTALL      │
-                            │ helm install   │
-                            └───────┬────────┘
-                                    │
-                                    ▼
-                          ┌────────────────────┐
-                          │ Kubernetes objects │
-                          │ created: Deployment│
-                          │ Service, Ingress…  │
-                          └─────────┬──────────┘
-                                    │
-                ┌──────────────────┼──────────────────┐
-                │                  │                  │
-                ▼                  ▼                  ▼
-            ┌─────────────┐   ┌─────────────┐   ┌─────────────────┐
-            │   UPGRADE   │   │  ROLLBACK   │   │   DELETE        │
-            │ helm upgrade│   │helm rollback│   │ helm uninstall│ |
-            └──────┬──────┘   └──────┬──────┘   └───────┬─────────┘
-                  │                 │                  │
-                  ▼                 ▼                  ▼
-            ┌─────────────┐   ┌───────────────┐   ┌───────────────────┐
-            │ New release │   │ Previous      │   │ All resources     │
-            │ deployed    │   │ version       │   │ removed from      │
-            │ (e.g. v2)   │   │ restored      │   │ cluster           │
-            └─────────────┘   └───────────────┘   └───────────────────┘
+                      ┌───────────────────────┐
+                      │   Start with Chart    │
+                      │ (YAML templates +     │
+                      │   values.yaml)        │
+                      └───────────┬───────────┘
+                                  │
+                                  ▼
+                          ┌────────────────┐
+                          │   INSTALL      │
+                          │ helm install   │
+                          └───────┬────────┘
+                                  │
+                                  ▼
+                        ┌────────────────────┐
+                        │ Kubernetes objects │
+                        │ created: Deployment│
+                        │ Service, Ingress…  │
+                        └─────────┬──────────┘
+                                  │
+              ┌──────────────────┼──────────────────┐
+              │                  │                  │
+              ▼                  ▼                  ▼
+        ┌─────────────┐   ┌─────────────┐   ┌─────────────────┐
+        │   UPGRADE   │   │  ROLLBACK   │   │   DELETE        │
+        │ helm upgrade│   │helm rollback│   │ helm uninstall│ |
+        └──────┬──────┘   └──────┬──────┘   └───────┬─────────┘
+               │                 │                  │
+               ▼                 ▼                  ▼
+        ┌─────────────┐   ┌───────────────┐   ┌───────────────────┐
+        │ New release │   │ Previous      │   │ All resources     │
+        │ deployed    │   │ version       │   │ removed from      │
+        │ (e.g. v2)   │   │ restored      │   │ cluster           │
+        └─────────────┘   └───────────────┘   └───────────────────┘
