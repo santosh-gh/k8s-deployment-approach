@@ -541,6 +541,7 @@
     helm status  order 1 -n dev
     helm status  product 1 -n dev
     helm status  store-front 1 -n dev
+    
 
 # Deploy to Different Environments
 
@@ -574,6 +575,8 @@
       helm install store-front ./multi-helmchart/store-front -f prod-values.yaml -n dev
 
       Same for helm upgrade ...
+
+
 
 # Helm Package 
 
